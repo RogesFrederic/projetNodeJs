@@ -13,8 +13,10 @@ app.post(URI, (req,res) => {
 Idem pour put et delete, etc
 */
 
-const users_api = require('./users');
-const posts_api = require('./posts');
+app.use('/users', require('./users'));
+app.use('/posts', require('./posts'));
+
+
 
 app.use((req, res, next) => {
     console.log("1 !");
