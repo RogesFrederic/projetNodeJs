@@ -13,6 +13,7 @@ app.use((req, res, next) => {
 });
 
 /**
+ * GET
  * Route : /users/
  * Renvoi la liste de tout les utilisateurs
  */
@@ -27,6 +28,7 @@ app.get('/', async (req, res) => {
 });
 
 /**
+ * GET
  * Route : /users/:id
  * Renvoi un seul utilisateur
  */
@@ -49,18 +51,39 @@ app.get('/:id', async (req, res) => {
             Format : {
                 A DEFINIR
             }*/
-app.post('/', (req, res) => {
-
+app.post('/', async (req, res) => {
+    /*try {
+        let user = await User.create({username: "Bob"});
+        return user ? res.status(200).json(user) : res.status(404).json('User not found');
+    }
+    catch (err) {
+        return res.status(501).json(err);
+    }*/
 });
 
-    /*
-    DELETE :
-        '/:id'  : Supprime un utilisateur
-            ADMIN
-    */
-app.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    
+/**
+ * DELETE
+ * Route : /users/:id
+ * Supprime un utilisateur
+ * Droit : ADMIN
+ */
+app.delete('/:id', async (req, res) => {
+    try {  
+        const { id } = req.params;
+        let isDeletable = await User.findByPk(id);
+        if (isDeletable) {
+            await User.destroy({
+                where: {
+                    id: id
+                }
+            });
+            return res.status(204).json();
+        }
+        return res.status(404).json('User not found');
+    }
+    catch (err) {
+        return res.status(501).json(err);
+    }
 });
 
    /*
