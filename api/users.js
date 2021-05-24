@@ -11,6 +11,7 @@ app.use((req, res, next) => {
     console.log("Je passe dans /api/users.js !");
     next();
 });
+app.use(express.json());
 
 /**
  * GET
@@ -51,14 +52,15 @@ app.get('/:id', async (req, res) => {
             Format : {
                 A DEFINIR
             }*/
+app.post('/', requestPostIsOk);
 app.post('/', async (req, res) => {
-    /*try {
-        let user = await User.create({username: "Bob"});
-        return user ? res.status(200).json(user) : res.status(404).json('User not found');
+    try {
+        let user = await User.create({username: req.body.username});
+        return res.status(201).json(user);
     }
     catch (err) {
         return res.status(501).json(err);
-    }*/
+    }
 });
 
 /**
@@ -107,5 +109,14 @@ app.delete('/:id', async (req, res) => {
 
 */
 
+/**
+ * Vérifie si la requete POST est correcte
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+function requestPostIsOk(req, res, next) {
+    req.body.username ? next() : res.status(400).json("Bad request");
+}
 
 module.exports = app;
