@@ -30,11 +30,18 @@ app.use((req, res, next) => {
 // });
 
 app.get('/', (req, res) => {
-    res.send('Hello World !');
+    res.send('Hello World !, je suis dans la première page !');
     // next({ msg : 'Une erreur est survenue' });
 });
 
 app.use((err, req, res, next) => {
+    /*
+    if(err instanceof HttpError) {
+        res.status(err.code).json(err);
+    } else {
+        res.status(500).json(err);
+    }
+    */
     res.status(500).json({ err });
 });
 

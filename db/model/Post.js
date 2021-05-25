@@ -16,12 +16,21 @@ const { sequelize } = require('../sequelize')
 class Post extends Model {}
 
 Post.init({
-    comment :{
+    p_title :{
         type: DataTypes.STRING
+    },
+    p_comment :{
+        type: DataTypes.STRING
+    },
+    p_publishDate :{
+        type: DataTypes.DATE
+    },
+    p_fk_user :{
+        type: DataTypes.INTEGER
     }
 }, {
     sequelize,
-    modelName: 'Post', //nom de la table = 'Users'
+    modelName: 'Post', //nom de la table = 'Post'
 })
 
 module.exports = { Post }
