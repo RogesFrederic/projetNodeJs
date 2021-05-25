@@ -1,13 +1,13 @@
 
 const { Model, DataTypes  } = require('sequelize')
 const { sequelize } = require('../sequelize')
-//const { User } = require('./User')
+
 
 
 class Post extends Model {}
 
 Post.init({
-    p_pk_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
     },
@@ -17,13 +17,13 @@ Post.init({
     p_title: {
         type: DataTypes.STRING
     },
-    createdDate: {
+    p_createdDate: {
         type: DataTypes.DATE
     },
     p_publishDate: {
         type: DataTypes.DATE
     },
-    p_u_id: {
+    p_user_id: {
         type: DataTypes.INTEGER,
         foreignKey: true
     }
