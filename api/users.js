@@ -1,13 +1,37 @@
-/*
+/** 
 * /api/users/js
 * Auteur : Frédéric Rogès
 */
 
 const express = require('express');
 const { User } = require('../db/model/User');
+const { Validator, ValidationError } = require('express-json-validator-middleware');
 const app = express();
+const validator = new Validator({allErrors: true});
+const validate = validator.validate;
+
 app.use(express.json());
 
+const postSchema = {
+    type: 'object',
+    required: ['firstname', 'lastname', 'email', 'password', 'role_id'],
+    properties: {
+        firstname: {
+            type: 'string'
+        },
+        lastname: {
+            type: 'string'
+        },
+        email: {
+            type: 'string',
+            format: 'email'
+        },
+        password: {
+            type: 'string'
+        }
+    }
+}
+const putSchema = postSchema;
 /**
  * GET
  * Route : /users/
@@ -44,9 +68,9 @@ app.get('/:id', async (req, res) => {
 * Route : /users/
 * Vérifie la validité de la requete puis crée un utilisateur
 */
-app.post('/', postRequestIsOk, async (req, res) => {
+app.post('/', validate({body: postSchema}), async (req, res) => {
     try {
-        let user = await User.create({username: req.body.username});
+        let user = await User.create(req.body);
         return res.status(201).json(user);
     }
     catch (err) {
@@ -60,7 +84,7 @@ app.post('/', postRequestIsOk, async (req, res) => {
  * Supprime un utilisateur
  * Droit : ADMIN
  */
-app.delete('/:id', async (req, res) => {
+app.delete('/:id', async (req, res, next) => {
     try {  
         const { id } = req.params;
         let isDeletable = await User.findByPk(id);
@@ -72,56 +96,16 @@ app.delete('/:id', async (req, res) => {
 });
 
 /**
- * PATCH
+ * PUT
  * Route : '/users/:id'
  * Role : USER, sauf le rôle
  * Vérifie le parametre donné et met a jour l'utilisateur
  */
-app.patch('/:id', patchRequestIsOk, async (req, res) => {
+app.put('/:id', validate({body: putSchema}), async (req, res) => {
     const { id } = req.params;
     let userExist = await User.findByPk(id);
     return userExist ? updateUser(id, req, res) : res.status(404).json('User not found');
 });
-
-/**
- * Vérifie si la requete POST est correcte
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- */
-function postRequestIsOk(req, res, next) {
-    req.body.username ? next() : res.status(400).json("Bad request");
-}
-/**
- * Vérifie si la requete PATCH est correcte
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- */
-function patchRequestIsOk(req, res, next) {
-    let { field, op } = req.body;
-    switch (op) {
-        case "delete":
-            req.body.value = "";
-            next();
-            break;
-        case "write":
-            switch (field) {
-                case 'username':
-                    next();
-                    break;
-                //case firstname:
-                //case lastname:
-                //....
-                default:
-                    res.status(400).json("Bad Request");
-            }
-            break;
-        default:
-            res.status(400).json("Bad Request");
-    }
-    
-}
 
 /**
  * Supprime un utilisateur et retourne le statut
@@ -139,10 +123,7 @@ async function deleteUser(id, res) {
 }
 
 async function updateUser(id, req, res) {
-    const { field, value } = req.body;
-    await User.update({
-        [field]: value
-    },
+    await User.update(req.body,
     {
         where: { id: id }
     });
