@@ -1,27 +1,57 @@
 
 const { Model, DataTypes  } = require('sequelize')
 const { sequelize } = require('../sequelize')
-// Ancienne méthode
-// =================
-// const User = sequelize.define ('User', {
-//     username : {
-//         type: DataTypes.STRING
-//     }
-// });
+const { User } = require('./User')
 
-
-// Nouvelle méthode
-// =================
 
 class Post extends Model {}
 
 Post.init({
-    comment :{
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+      },
+      content: {
+        type: DataTypes.TEXT
+      },
+      title: {
         type: DataTypes.STRING
-    }
+      },
+      createdDate: {
+        type: DataTypes.DATE
+      },
+      publishDate: {
+          type: DataTypes.DATE
+      },
+      u_id: {
+          type: DataTypes.INTEGER,
+          foreignKey: true
+      }
 }, {
     sequelize,
-    modelName: 'Post', //nom de la table = 'Users'
+    modelName: 'Post'
 })
+
+// Dans index.js //
+// Post.hasMany(User);
+// User.belongsTo(Post);
+
+// ........................ //
+
+// Manière compliqué //
+// Post.belongsTo(User, {
+//     as: 'User',
+//     foreignKey: {
+//         name: 'u_id',
+//         allowNull: false
+//     }
+// });
+
+// Post.findAll({
+//     include: [{
+//         model: User,
+//         where: { id: Sequelize.col('p.u_id') }
+//     }]
+// })
 
 module.exports = { Post }
