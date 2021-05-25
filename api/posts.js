@@ -21,9 +21,9 @@ class NotFoundError extends HttpError {
 
 const postSchema = { 
     type: 'object',
-    required: ['comment', 'title'],
+    required: ['content', 'title'],
     properties: {
-        comment :{"type": "string"},
+        content :{"type": "string"},
         title : {"type": "string"} ,
         publishDate : {
             "type": "string" , 
@@ -48,7 +48,7 @@ app.get('/', async(req, res, next) => {
 app.get('/:id', async(req, res, next ) => {
     try { 
         const id = req.params.id // on récupère la valeure dans l'url
-        const post = await Post.findOne({ where: { id } }) // on récupère le livre grâce à son _id
+        const post = await Post.findByPk(id)// on récupère le livre grâce à son _id
         return post ? res.status(200).json(post) : res.status(404).json({ msg: 'Post not found' });
         /*
             if(!post) {
@@ -76,7 +76,7 @@ app.delete('/:id', async(req, res) => {
 
 app.post('',validate({body: postSchema}), async (req,res,next) => {
 
-    const { comment } = req.body;
+    const { content } = req.body;
     const { title } = req.body;
     const { publishDate } = req.body;
     const { p_fk_user } = req.body;
@@ -85,32 +85,36 @@ app.post('',validate({body: postSchema}), async (req,res,next) => {
     console.log("je recupere les données ")
     const post1 = await Post.create({
         p_title : title,
-        p_comment :comment,
+        p_content :content,
         p_fk_user : p_fk_user,
         p_publishDate:publishDate,
     });
 
-    console.log("The first Post auto-generated ID", post1.id);
-    res.send("The first Post auto-generated ID: " +post1.id )
+    /*
+    console.log("The first Post auto-generated ID", post1.p_pk_id);
+    res.send("The first Post auto-generated ID: " +post1.p_pk_id )
+    */
+
+    res.status(201).json(post1);
 })
 
 app.put('/:id', validate({body: postSchema}), async(req,res,next) => {
 
-    const { comment , title, publishDate, p_fk_user } = req.body;
+    const { content , title, p_publishDate, p_fk_user } = req.body;
     const { id } = req.params;
 
-    // await Post.update({
-    //     p_title : title,
-    //     p_comment :comment,
-    //     p_fk_user : p_fk_user,
-    //     p_publishDate:publishDate,
-    // }, 
-    // {where: { id : id }}
-    // );
+    await Post.update({
+        p_title : title,
+        p_content :content,
+        p_fk_user : p_fk_user,
+        p_publishDate:p_publishDate,
+    }, 
+    {where: { p_pk_id : id }}
+    );
 
-    await Post.update(req.body, {
-        where: { id: id }
-    })
+    // await Post.update(req.body, {
+    //     where: { p_pk_id: id }
+    // })
     
     return res.status(200).json(id  + " is update ");
 })
