@@ -6,33 +6,32 @@ const { sequelize } = require('../sequelize')
 
 class Post extends Model {}
 
-Post.init({
-    p_pk_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-    },
-    p_content: {
-        type: DataTypes.TEXT
-    },
-    p_title: {
-        type: DataTypes.STRING
-    },
-    p_publishDate: {
-        type: DataTypes.DATE
-    },
-    p_fk_user_id: {
-        type: DataTypes.INTEGER,
-        foreignKey: true
-    },
-    p_fk_tag_id: {
-        type: DataTypes.INTEGER,
-        foreignKey: true
+Post.init(
+    {
+        p_pk_id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        p_content: {
+            type: DataTypes.TEXT
+        },
+        p_title: {
+            type: DataTypes.STRING
+        },
+        p_publishDate: {
+            type: DataTypes.DATE
+        },
+        p_fk_user_id: {
+            type: DataTypes.INTEGER,
+            foreignKey: true
+        }
+    }, 
+    {
+        sequelize,
+        modelName: 'Post'
     }
-    }, {
-    sequelize,
-    modelName: 'Post'
-})
+)
 
 // Dans index.js //
 // Post.belongsTo(User);
