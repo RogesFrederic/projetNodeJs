@@ -5,8 +5,10 @@
 
 const express = require('express');
 const { Post } = require('../db/model/Post');
+const { Tag } = require('../db/model/Tag');
 const { Validator, ValidationError } = require('express-json-validator-middleware');
 const { Op } = require("sequelize");
+// const { ExclusionConstraintError } = require('sequelize/types');
 const app = express();
 var validator = new Validator({allErrors: true});
 var validate = validator.validate;
@@ -67,6 +69,14 @@ const postSchema = {
                     });
                 break;
             case ('tags' in req.query):
+                
+                let allTag =  await Tag.findOne(
+                    { where : {t_content : tags}  ,
+                    include : Post })
+                console.log(allTag)
+                // si tag exist
+                // if tage ok avec id du Tag dans la table : Link_post_tag ou id tag = tag
+                // si match je recupere l'Id des posts
                 break;
             case ('keyword' in req.query):
                 all = await Post.findAll({
@@ -131,14 +141,23 @@ app.delete('/:id', async(req, res, next) => {
  * créer un post => verification des données en amont
  */
 app.post('',validate({body: postSchema}), async (req,res,next) => {
-
-    const { content , title, publishDate,p_fk_user } = req.body;
+   
+    const { content , title, publishDate,p_fk_user , tags} = req.body;
+    console.log(tags)
     const post1 = await Post.create({
         p_title : title,
         p_content :content,
         p_fk_user : p_fk_user,
         p_publishDate:publishDate,
     });
+    let tag = await Tag.findOne({ where : { t_content : tags}})
+    if(!tag) {
+        await Tag.create({
+            t_content : tags
+        })
+        tag = await Tag.findOne({ where : { t_content : tags}})
+    }
+    post1.addTag(tag)
     res.status(201).json(post1);
 })
 

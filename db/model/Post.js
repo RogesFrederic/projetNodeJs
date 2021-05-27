@@ -22,10 +22,6 @@ Post.init(
         p_publishDate: {
             type: DataTypes.DATE
         },
-        p_fk_user_id: {
-            type: DataTypes.INTEGER,
-            foreignKey: true
-        }
     }, 
     {
         sequelize,

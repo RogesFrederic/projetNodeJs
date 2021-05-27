@@ -5,13 +5,13 @@ const { Permission } = require('./model/Permission')
 const { Tag } = require('./model/Tag')
 const { sequelize } = require('./sequelize')
 
-module.exports = { User, Post, Role, Permission, sequelize }
+module.exports = { User, Post, Role, Permission, sequelize, Tag }
 
-Post.belongsTo(User, {as : 'user_id'});
+Post.belongsTo(User);
 User.hasMany(Post);
 
 Role.hasMany(User);
-User.belongsTo(Role, {as : 'role_id'});
+User.belongsTo(Role);
 
 Post.belongsToMany(Tag, { through : 'Link_post_tag'});
 Tag.belongsToMany(Post, { through : 'Link_post_tag'});

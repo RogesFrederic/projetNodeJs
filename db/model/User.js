@@ -22,10 +22,6 @@ User.init({
       u_password: {
         type: DataTypes.STRING
       },
-      u_fk_role_id: {
-        type: DataTypes.INTEGER,
-        foreignKey: true
-    }
 }, {
     sequelize,
     modelName: 'User'

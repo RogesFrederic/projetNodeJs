@@ -6,7 +6,7 @@ const { sequelize } = require('../sequelize')
 class Role extends Model {}
 
 Role.init({
-    r_pk_id: {
+      r_pk_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
