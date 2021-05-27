@@ -20,6 +20,7 @@ app.use(async (req, res, next) => {
     }
 })
 
+//Création de la session
 app.post('/token', (req, res) => {
     // validation username + password
     let id = req.body.id
