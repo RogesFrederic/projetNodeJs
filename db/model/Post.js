@@ -25,7 +25,7 @@ Post.init({
       },
       u_id: {
           type: DataTypes.INTEGER,
-          foreignKey: true
+          foreignKey: true 
       }
 }, {
     sequelize,
