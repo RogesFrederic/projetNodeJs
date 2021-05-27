@@ -96,8 +96,7 @@ app.get('/search/:search', async(req, res, next ) => {
                 [Op.or]: [
                     
                         { p_content :{[Op.like]: '%'+search +'%'}}, 
-                        { p_title :{[Op.like]: '%'+search +'%'}},
-                        { p_content :{[Op.like]: '%'+search +'%'}}, 
+                        { p_title :{[Op.like]: '%'+search +'%'}}
                     
                 ]
             }
