@@ -24,6 +24,10 @@ Post.init({
     p_user_id: {
         type: DataTypes.INTEGER,
         foreignKey: true
+    },
+    p_tag_id: {
+        type: DataTypes.INTEGER,
+        foreignKey: true
     }
     }, {
     sequelize,

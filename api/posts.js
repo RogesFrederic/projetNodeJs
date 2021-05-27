@@ -109,7 +109,34 @@ app.get('/:id', async(req, res, next ) => {
     }  
 })
 
+<<<<<<< HEAD
 
+=======
+/**
+ * GET
+ * Route : /posts/search/:search
+ * Renvoi la liste de tous les posts avec le filtre :search
+ */
+app.get('/search/:search', async(req, res, next ) => {
+    try { 
+        const search = req.params.search ;
+        console.log(search)
+        let allFind = await Post.findAll({
+            where: {
+                [Op.or]: [
+                    
+                        { p_content :{[Op.like]: '%'+search +'%'}}, 
+                        { p_title :{[Op.like]: '%'+search +'%'}}
+                    
+                ]
+            }
+        });
+        return res.status(200).json(allFind);
+    } catch (err) {
+        next(err);
+    }  
+})
+>>>>>>> 21598cf057f4f7626e938d8c116e70dc745848d6
 /**
  * DELETE
  * Route : /posts/:id
