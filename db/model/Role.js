@@ -6,14 +6,14 @@ const { sequelize } = require('../sequelize')
 class Role extends Model {}
 
 Role.init({
-    id: {
+    r_pk_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
-      label: {
+      r_label: {
         type: DataTypes.STRING
       },
-      description : {
+      r_description : {
         type: DataTypes.TEXT
       }
 }, {

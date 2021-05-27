@@ -6,23 +6,23 @@ const { sequelize } = require('../sequelize')
 class User extends Model {}
 
 User.init({
-    id: {
+    u_pk_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
-      firstname: {
+      u_firstname: {
         type: DataTypes.STRING
       },
-      lastname: {
+      u_lastname: {
         type: DataTypes.STRING
       },
-      email: {
+      u_email: {
         type: DataTypes.STRING
       },
-      password: {
+      u_password: {
         type: DataTypes.STRING
       },
-      role_id: {
+      u_fk_role_id: {
         type: DataTypes.INTEGER,
         foreignKey: true
     }

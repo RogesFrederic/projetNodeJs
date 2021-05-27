@@ -6,14 +6,14 @@ const { sequelize } = require('../sequelize')
 class Permission extends Model {}
 
 Permission.init({
-    id: {
+    p_pk_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
-      label: {
+      p_label: {
         type: DataTypes.STRING
       },
-      description: {
+      p_description: {
         type: DataTypes.STRING
       }
 }, {
