@@ -6,11 +6,11 @@ const { sequelize } = require('../sequelize')
 class Tag extends Model {}
 
 Tag.init({
-    id: {
+    t_pk_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
-    content: {
+    t_content: {
       type: DataTypes.TEXT
     }
 }, {

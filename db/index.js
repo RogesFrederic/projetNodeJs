@@ -7,14 +7,14 @@ const { sequelize } = require('./sequelize')
 
 module.exports = { User, Post, Role, Permission, sequelize }
 
-Post.belongsTo(User);
+Post.belongsTo(User, {as : 'user_id'});
 User.hasMany(Post);
 
 Role.hasMany(User);
-User.belongsTo(Role);
+User.belongsTo(Role, {as : 'role_id'});
 
-Post.belongsToMany(Tag);
-Tag.belongsToMany(Post);
+Post.belongsToMany(Tag, {as : 'tag_id'});
+Tag.belongsToMany(Post, {as : 'post_id'});
 
 Permission.belongsToMany(Role, { through : 'Link_role_permission'});
 Role.belongsToMany(Permission, { through : 'Link_role_permission'});

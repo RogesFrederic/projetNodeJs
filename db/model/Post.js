@@ -21,11 +21,11 @@ Post.init({
     p_publishDate: {
         type: DataTypes.DATE
     },
-    p_user_id: {
+    p_fk_user_id: {
         type: DataTypes.INTEGER,
         foreignKey: true
     },
-    p_tag_id: {
+    p_fk_tag_id: {
         type: DataTypes.INTEGER,
         foreignKey: true
     }
@@ -35,8 +35,8 @@ Post.init({
 })
 
 // Dans index.js //
-// Post.hasMany(User);
-// User.belongsTo(Post);
+// Post.belongsTo(User);
+// User.hasMany(Post);
 
 // ........................ //
 
