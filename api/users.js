@@ -9,6 +9,7 @@ const { Validator, ValidationError } = require('express-json-validator-middlewar
 const app = express();
 const validator = new Validator({allErrors: true});
 const validate = validator.validate;
+const bcrypt = require('bcrypt');
 
 app.use(express.json());
 
@@ -32,6 +33,20 @@ const postSchema = {
     }
 }
 const putSchema = postSchema;
+
+const connexionSchema = {
+    type: 'object',
+    required: ['email', 'password'],
+    properties: {
+        email: {
+            type: 'string',
+            format: 'email'
+        },
+        password: {
+            type: 'string'
+        }
+    }
+}
 /**
  * GET
  * Route : /users/
@@ -68,10 +83,34 @@ app.get('/:id', async (req, res) => {
 * Route : /users/
 * Vérifie la validité de la requete puis crée un utilisateur
 */
-app.post('/', validate({body: postSchema}), async (req, res) => {
+app.post('/', validate({body: postSchema}),cryptage, async (req, res) => {
     try {
         let user = await User.create(req.body);
         return res.status(201).json(user);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+/**
+* POST 
+* Route : /users/connexion
+* Vérifie les identifiants de l'utilisateur
+*/
+app.post('/connexion', validate({body: connexionSchema}), async (req, res, next) => {
+    try {
+        let user = await User.findOne({ where: { email: req.body.email } });
+        if (user === null) {
+            return res.status(401).json();
+        } else {
+            const validate = await validPassword(req.body.password, user.password);
+            if(validate){
+                return res.status(200).json();
+            }else{
+                return res.status(401).json(); 
+            }
+        }
     }
     catch (err) {
         next(err);
@@ -128,6 +167,20 @@ async function updateUser(id, req, res) {
         where: { id: id }
     });
     return res.status(204).json();
+}
+
+
+async function cryptage(req,res, next) {
+    const saltRounds = 10;
+    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+        req.body.password = hash;
+        next();
+    });
+}
+
+async function validPassword (passwordRecupere, passwordCrypte) {
+    var compare = await bcrypt.compareSync(passwordRecupere, passwordCrypte);
+    return compare;
 }
 
 module.exports = app;
