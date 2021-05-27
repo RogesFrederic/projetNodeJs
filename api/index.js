@@ -1,8 +1,10 @@
 const express = require('express');
+const token = require('./token');
 const app = express();
 
 app.use('/users', require('./users'));
 app.use('/posts', require('./posts'));
+app.use(token.app);
 
 app.use((req, res, next) => {
     console.log("Je passe dans /api/index.js !");
@@ -15,8 +17,8 @@ app.use((req, res, next) => {
 //     next();
 // });
 
-app.get('/', (req, res) => {
-    res.send('Hello World !, je suis dans la première page !');
+app.get('/', token.authenticateToken, (req, res) => {
+    res.send('Hello World !, je suis dans la première page et je suis authentifié!');
     // next({ msg : 'Une erreur est survenue' });
 });
 

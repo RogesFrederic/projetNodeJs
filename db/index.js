@@ -7,8 +7,8 @@ const { sequelize } = require('./sequelize')
 
 module.exports = { User, Post, /*Link_role_permission,*/ Role, Permission, sequelize }
 
-Post.hasMany(User);
-User.belongsTo(Post);
+Post.belongsTo(User);
+User.hasMany(Post);
 
 Role.hasMany(User);
 User.belongsTo(Role);
