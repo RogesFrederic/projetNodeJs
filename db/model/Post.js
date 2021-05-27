@@ -7,18 +7,16 @@ const { sequelize } = require('../sequelize')
 class Post extends Model {}
 
 Post.init({
-    id: {
+    p_pk_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     p_content: {
         type: DataTypes.TEXT
     },
     p_title: {
         type: DataTypes.STRING
-    },
-    p_createdDate: {
-        type: DataTypes.DATE
     },
     p_publishDate: {
         type: DataTypes.DATE
