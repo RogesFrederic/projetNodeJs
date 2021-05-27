@@ -19,8 +19,8 @@ Tag.init({
 })
 
 // Dans index.js //
-// User.belongsToMany(Role, { throught : 'RoleUser'});
-// Role.belongsToMany(User, { throught : 'RoleUser'});
+// Post.belongsToMany(Tag);
+// Tag.belongsToMany(Post);
 
 
 module.exports = { Tag }
