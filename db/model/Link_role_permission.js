@@ -1,5 +1,5 @@
 
-const { Model, DataTypes,  } = require('sequelize')
+/*const { Model, DataTypes,  } = require('sequelize')
 const { sequelize } = require('../sequelize')
 const { Permission } = require('./Permission')
 const { Role } = require('./Role')
@@ -16,7 +16,7 @@ Link_role_permission.init({
         type: DataTypes.INTEGER,
         foreignKey: true
       },
-      r_id: {
+      role_id: {
         type: DataTypes.INTEGER,
         foreignKey: true
       }
@@ -67,4 +67,4 @@ Link_role_permission.init({
 //   }]
 // })
 
-module.exports = { Link_role_permission }
+module.exports = { Link_role_permission }*/

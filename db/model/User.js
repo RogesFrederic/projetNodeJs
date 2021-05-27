@@ -1,7 +1,7 @@
 
 const { Model, DataTypes,  } = require('sequelize')
 const { sequelize } = require('../sequelize')
-const { Role } = require('./Role')
+//const { Role } = require('./Role')
 
 
 class User extends Model {}
@@ -23,7 +23,7 @@ User.init({
       password: {
         type: DataTypes.STRING
       },
-      r_id: {
+      role_id: {
         type: DataTypes.INTEGER,
         foreignKey: true
     }

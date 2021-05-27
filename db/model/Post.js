@@ -1,33 +1,31 @@
 
 const { Model, DataTypes  } = require('sequelize')
 const { sequelize } = require('../sequelize')
-const { User } = require('./User')
+
 
 
 class Post extends Model {}
 
 Post.init({
-    id: {
+    p_pk_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-      },
-      content: {
+        autoIncrement: true,
+    },
+    p_content: {
         type: DataTypes.TEXT
-      },
-      title: {
+    },
+    p_title: {
         type: DataTypes.STRING
-      },
-      createdDate: {
+    },
+    p_publishDate: {
         type: DataTypes.DATE
-      },
-      publishDate: {
-          type: DataTypes.DATE
-      },
-      u_id: {
-          type: DataTypes.INTEGER,
-          foreignKey: true 
-      }
-}, {
+    },
+    p_user_id: {
+        type: DataTypes.INTEGER,
+        foreignKey: true
+    }
+    }, {
     sequelize,
     modelName: 'Post'
 })
