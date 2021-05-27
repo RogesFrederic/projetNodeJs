@@ -13,8 +13,8 @@ User.hasMany(Post);
 Role.hasMany(User);
 User.belongsTo(Role, {as : 'role_id'});
 
-Post.belongsToMany(Tag, {as : 'tag_id'});
-Tag.belongsToMany(Post, {as : 'post_id'});
+Post.belongsToMany(Tag, { through : 'Link_post_tag'});
+Tag.belongsToMany(Post, { through : 'Link_post_tag'});
 
 Permission.belongsToMany(Role, { through : 'Link_role_permission'});
 Role.belongsToMany(Permission, { through : 'Link_role_permission'});
