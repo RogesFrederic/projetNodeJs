@@ -3,7 +3,7 @@ const { sequelize } = require('./db');
 const { app } = require('./api');
 
 
-sequelize.sync().then(() => {
+sequelize.sync({alter :true}).then(() => {
     console.log('DB is ready !');
     app.listen(8080, () => {
         console.log("Server is ready !");

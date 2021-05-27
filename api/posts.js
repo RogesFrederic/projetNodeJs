@@ -49,15 +49,43 @@ const postSchema = {
 /**
  * GET
  * Route : /posts/
- * Renvoi la liste de tous les posts
+ * Renvoi la liste de tous les posts 
+ * @queryParam title string Renvoi les posts filtrés par mot clef dans un titre
+ * @queryParam tags string[] separé par une virgule Renvoi les posts filtrés par tag
+ * @queryParam keyword string Renvoi les posts filtrés par mot clef
+ *
  */
-app.get('/', async(req, res, next) => {
-    try { 
-        let all = await Post.findAll();
-        return res.status(200).json(all);
+ app.get('/', async(req, res, next) => {
+    try {
+        let all;
+        const { title, tags, keyword } = req.query;
+        switch (true) {
+            case ('title' in req.query):
+                console.log(title);
+                all = await Post.findAll({
+                        where: { p_title :{[Op.like]: '%'+ title +'%'}}                  
+                    });
+                break;
+            case ('tags' in req.query):
+                break;
+            case ('keyword' in req.query):
+                all = await Post.findAll({
+                    where: {
+                        [Op.or]: [
+                                { p_content :{[Op.like]: '%'+keyword +'%'}}, 
+                                { p_title :{[Op.like]: '%'+keyword +'%'}}                  
+                        ]
+                    }
+                });
+                break;
+            default:
+                all = await Post.findAll();
+            
+        }
+        res.status(200).json(all);
     } catch (err) {
         next(err);
-    }  
+    }
 });
 
 /**
@@ -74,7 +102,6 @@ app.get('/:id', async(req, res, next ) => {
             if(!post) {
                 throw new NotFoundError();
             }
-
             res.status(200).json(post)
         */
     } catch (err) {
@@ -82,31 +109,7 @@ app.get('/:id', async(req, res, next ) => {
     }  
 })
 
-/**
- * GET
- * Route : /posts/search/:search
- * Renvoi la liste de tous les posts avec le filtre :search
- */
-app.get('/search/:search', async(req, res, next ) => {
-    try { 
-        const search = req.params.search ;
-        console.log(search)
-        let allFind = await Post.findAll({
-            where: {
-                [Op.or]: [
-                    
-                        { p_content :{[Op.like]: '%'+search +'%'}}, 
-                        { p_title :{[Op.like]: '%'+search +'%'}},
-                        { p_content :{[Op.like]: '%'+search +'%'}}, 
-                    
-                ]
-            }
-        });
-        return res.status(200).json(allFind);
-    } catch (err) {
-        next(err);
-    }  
-})
+
 /**
  * DELETE
  * Route : /posts/:id
