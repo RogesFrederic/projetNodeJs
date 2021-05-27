@@ -9,6 +9,7 @@ User.init({
     u_pk_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
       },
       u_firstname: {
         type: DataTypes.STRING

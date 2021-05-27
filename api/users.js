@@ -85,7 +85,14 @@ app.get('/:id', async (req, res) => {
 */
 app.post('/', validate({body: postSchema}),cryptage, async (req, res) => {
     try {
-        let user = await User.create(req.body);
+        const { lastname , firstname, email, password , role_id} = req.body;
+        let user = await User.create({
+            u_firstname: firstname,
+            u_lastname : lastname,
+            u_email :email,
+            u_password : password,
+            u_role_id:role_id,
+        });
         return res.status(201).json(user);
     }
     catch (err) {
@@ -155,7 +162,7 @@ app.put('/:id', validate({body: putSchema}), async (req, res) => {
 async function deleteUser(id, res) {
     await User.destroy({
         where: {
-            id: id
+            u_pk_id: id
         }
     });
     return res.status(204).json();
@@ -164,7 +171,7 @@ async function deleteUser(id, res) {
 async function updateUser(id, req, res) {
     await User.update(req.body,
     {
-        where: { id: id }
+        where: { u_pk_id: id }
     });
     return res.status(204).json();
 }
